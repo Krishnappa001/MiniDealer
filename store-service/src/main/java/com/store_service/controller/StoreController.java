@@ -3,6 +3,7 @@ package com.store_service.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,9 @@ public class StoreController {
 
     @Autowired
     private StoreUtil util;
+    
+    @Value("${microservice.dealer-service.endpoints.endpoint.uri}")
+    private String dealerEndpoint;
 
     @PostMapping(value="/add-store", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<APIResponse<StoreDTO>> addStore(@RequestBody StoreDTO storeDetailsDTO) {
@@ -87,7 +91,9 @@ public class StoreController {
         
         StoreDTO stores = storeMasterService.getStoreById(storeId);
         
-        log.info("StoreController::getAllStores() - Response: {}", util.jsonAsString(stores));
+        log.info("StoreController::getStoreById() - Response: {}", util.jsonAsString(stores));
+        log.info("StoreController::getStoreById() - Response: dealer endpoint {}", util.jsonAsString(dealerEndpoint));
+        
         return new ResponseEntity<>(stores, HttpStatus.OK);
     }
     
